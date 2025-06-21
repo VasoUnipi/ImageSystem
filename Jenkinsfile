@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Health Check') {
             steps {
-                sh 'sleep 5 && curl -f http://localhost:5000 || exit 1'
+                sh 'curl -f http://flaskapp:5000'
             }
         }
     }
