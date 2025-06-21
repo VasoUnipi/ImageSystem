@@ -10,8 +10,7 @@ services:
       MINIO_HOST: minio:9000
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
-    depends_on:
-      - minio
+
 
 volumes:
   minio_data:
