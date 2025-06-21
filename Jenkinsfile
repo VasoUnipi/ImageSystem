@@ -13,7 +13,8 @@ pipeline {
         }
         stage('Health Check') {
             steps {
-                sh 'curl -f http://flaskapp:5000'
+                sh 'sleep 5'
+                sh 'docker-compose exec -T flaskapp curl -f http://localhost:5000'
             }
         }
     }

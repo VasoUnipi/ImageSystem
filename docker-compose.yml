@@ -1,8 +1,15 @@
-version: '3.8'
+version: "3.9"
 services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
   flaskapp:
     build:
-      context: .
+      context: ./app
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
@@ -10,8 +17,21 @@ services:
       MINIO_HOST: minio:9000
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
+    depends_on:
+      - minio
 
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
 
 volumes:
+  jenkins_home:
   minio_data:
-  jenkins_data:
