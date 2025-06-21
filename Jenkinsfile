@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build Image') {
             steps {
-                sh 'docker build -f Docker/Dockerfile.app -t jenkins-flaskapp .'
+                sh 'docker build -f app/Dockerfile -t jenkins-flaskapp app/'
             }
         }
         stage('Run System') {
