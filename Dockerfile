@@ -1,7 +1,13 @@
-FROM python:3.10-slim
-WORKDIR /app
-COPY app/requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-COPY app/ .
-COPY app/templates ./templates
-CMD ["python", "app.py"]
+FROM jenkins/jenkins:lts
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    docker-compose \
+    curl
+
+# Προαιρετικά: add jenkins user to docker group
+RUN usermod -aG docker jenkins || true
+
+USER jenkins
