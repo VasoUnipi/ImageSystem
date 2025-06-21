@@ -6,15 +6,15 @@ pipeline {
                 sh 'docker build -f Dockerfile -t jenkins-flaskapp .'
             }
         }
-        stage('Run System') {
+        stage('Run Flaskapp') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'docker run -d --name flaskapp_test --network=imagesystem_default -p 5001:5000 jenkins-flaskapp'
             }
         }
         stage('Health Check') {
             steps {
                 sh 'sleep 5'
-                sh 'docker-compose exec -T flaskapp curl -f http://localhost:5000'
+                sh 'curl -f http://localhost:5001'
             }
         }
     }
