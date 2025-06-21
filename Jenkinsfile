@@ -8,13 +8,13 @@ pipeline {
         }
         stage('Run Flaskapp') {
             steps {
-                sh 'docker run -d --name flaskapp_test --network=imagesystem_default -p 5001:5000 jenkins-flaskapp'
+                sh 'docker run -d --rm --name flaskapp_test --network=imagesystem_default -p 5001:5000 jenkins-flaskapp'
             }
         }
         stage('Health Check') {
             steps {
                 sh 'sleep 5'
-                sh 'curl -f http://localhost:5001'
+                sh 'curl -f http://flaskapp_test:5000'  // 👈 όχι localhost!
             }
         }
     }
