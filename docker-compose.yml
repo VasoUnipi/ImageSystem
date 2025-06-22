@@ -1,39 +1,39 @@
 version: "3.9"
 services:
   jenkins:
-    image: jenkins/jenkins:lts
-    user: root
+    image: jenkins/jenkins:lts # Επίσημο image του Jenkins (LTS = Long Term Support)
+    user: root # Ορίζουμε root χρήστη ώστε να μπορεί να έχει πρόσβαση στο docker.sock
     ports:
-      - "8080:8080"
+      - "8080:8080" # Το Jenkins θα είναι προσβάσιμο στο localhost:8080
     volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home # Επίμονος όγκος για αποθήκευση ρυθμίσεων Jenkins
+      - /var/run/docker.sock:/var/run/docker.sock  # Επιτρέπει στο Jenkins να τρέχει Docker εντολές στο host (Docker-in-Docker)
 
   flaskapp:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: . # Ορίζεται ο φάκελος όπου βρίσκεται το Dockerfile (τρέχων φάκελος)
+      dockerfile: Dockerfile # Το όνομα του Dockerfile που θα χρησιμοποιηθεί για το build
     ports:
-      - "5000:5000"
+      - "5000:5000" # Το Flask app είναι προσβάσιμο τοπικά μέσω θύρας 5000
     environment:
-      MINIO_HOST: minio:9000
-      MINIO_ACCESS_KEY: minioadmin
+      MINIO_HOST: minio:9000 # Διεύθυνση MinIO container (DNS-based μέσω Compose)
+      MINIO_ACCESS_KEY: minioadmin # Credentials για πρόσβαση
       MINIO_SECRET_KEY: minioadmin
     depends_on:
-      - minio
+      - minio # Βεβαιώνεται ότι το MinIO container ξεκινά πριν από το Flask
 
   minio:
-    image: minio/minio
-    command: server /data --console-address ":9001"
+    image: minio/minio # Επίσημο image του MinIO 
+    command: server /data --console-address ":9001" # Εκκίνηση MinIO με UI κονσόλα στη θύρα 9001
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9000:9000" # Κύρια REST API θύρα του MinIO
+      - "9001:9001" # Web UI για να βλέπουμε τα αρχεία μέσω browser
     environment:
-      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_USER: minioadmin # Username πρόσβασης στον MinIO server
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-      - minio_data:/data
+      - minio_data:/data # Επίμονος όγκος για αποθήκευση αρχείων MinIO
 
 volumes:
-  jenkins_home:
-  minio_data:
+  jenkins_home: # Ορισμός named volume για Jenkins
+  minio_data:  # Ορισμός named volume για MinIO

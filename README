@@ -1,4 +1,80 @@
-Image Uploader
+#  Εργασία Θέματος 9 – Ενοποίηση Στοιχείων Πληροφοριακού Συστήματος μέσω Containers
 
+Αυτή η εργασία υλοποιήθηκε στο πλαίσιο του μαθήματος **«Ευφυή Πληροφοριακά Συστήματα και Τεχνητή Νοημοσύνη»**, και αφορά την ανάπτυξη και ολοκλήρωση ενός πληροφοριακού συστήματος χρησιμοποιώντας **Docker** και **Jenkins**.
 
-Λειτουργία: Πληροφοριακό σύστημα αποθήκευσης εικόνων με Flask + MinIO 
+##  Περιγραφή Συστήματος
+
+Το σύστημα αποτελείται από δύο βασικά containers:
+
+-  **Flask εφαρμογή (custom image):** Web διεπαφή για ανέβασμα εικόνων.
+-  **MinIO object storage (έτοιμο image):** Αποθηκεύει τις εικόνες αντικειμενοστραφώς (S3-compatible).
+
+Η επικοινωνία γίνεται μέσω **Docker Compose**, ενώ η αυτοματοποίηση build & deploy επιτυγχάνεται με χρήση **Jenkins pipeline**.
+
+---
+
+##  Περιεχόμενα
+
+- `app.py`: Κώδικας της Flask εφαρμογής
+- `upload.html`: Template για τη φόρμα υποβολής αρχείου
+- `Dockerfile`: Ορισμός custom image για Flask app
+- `docker-compose.yml`: Ενοποίηση όλων των services
+- `Jenkinsfile`: Αυτοματοποιημένο pipeline build/deploy/test
+- `requirements.txt`: Python εξαρτήσεις της εφαρμογής
+
+---
+
+##  Εκκίνηση με Docker Compose
+
+1. **Κλωνοποίησε το αποθετήριο:**
+
+```bash
+git clone https://github.com/VasoUnipi/ImageSystem.git
+cd ImageSystem
+```
+
+2. **Εκκίνηση containers:**
+
+```bash
+docker-compose up --build
+```
+
+3. **Πρόσβαση στην εφαρμογή:**
+
+- Flask app: [http://localhost:5000](http://localhost:5000)
+- MinIO Console (προαιρετικά): [http://localhost:9001](http://localhost:9001)  
+  Credentials: `minioadmin / minioadmin`
+
+---
+
+##  Jenkins Pipeline
+
+Για την εκτέλεση αυτόματου build & deploy:
+
+1. Δημιουργήστε νέο Jenkins job τύπου *Pipeline*
+2. Επιλέξτε **Pipeline script from SCM**
+3. Ορίστε:
+   - **Git repo:** `https://github.com/VasoUnipi/ImageSystem.git
+   - **Branch:** `main`
+   - **Script path:** `Jenkinsfile`
+4. Απενεργοποιήστε το **Lightweight checkout**
+5. Εκτελέστε το pipeline
+
+---
+
+## Χαρακτηριστικά
+
+-  Ανεβάζει εικόνες μέσω απλή φόρμα
+-  Αποθηκεύει οργανωμένες εικόνες σε MinIO bucket (`images`)
+-  Αυτόματη δημιουργία και εκτέλεση container με Jenkins
+-  Εμφανίζει μήνυμα επιτυχίας στον χρήστη
+-  Περιλαμβάνει health check της εφαρμογής
+
+---
+## Συντελεστές
+
+Ονοματεπώνυμο: Βασιλική Ισούκη, Άννα-Μαρίνα Χαμαλίδου και Αθανάσιος Νατούδης
+
+Τμήμα: Ψηφιακών Συστημάτων – ΠΜΣ Πληροφοριακά Συστήματα & Υπηρεσίες
+
+Ακαδημαϊκό έτος: 2024–2025

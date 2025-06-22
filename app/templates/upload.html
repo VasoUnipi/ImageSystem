@@ -2,11 +2,23 @@
 <html>
 <head>
   <title>Upload Image</title>
+  <meta charset="UTF-8"> <!-- Ορισμός χαρακτήρων UTF-8 για υποστήριξη ελληνικών -->
 </head>
 <body>
-  <h2>Ανέβασε μια εικόνα</h2>
+  <h2>Ανέβασε μια εικόνα</h2> <!-- Επικεφαλίδα σελίδας -->
+
+<!-- Αν έχει ανέβει εικόνα με επιτυχία, εμφανίζεται μήνυμα επιβεβαίωσης -->
+  {% if success %}
+    <p style="color: green;">
+      Το αρχείο <strong>{{ filename }}</strong> ανέβηκε επιτυχώς!
+      <br>Μπορείς να ανεβάσεις και άλλη εικόνα παρακάτω.
+    </p>
+  {% endif %}
+ <!-- Φόρμα υποβολής αρχείου (μέθοδος POST, τύπος multipart για αρχεία) -->
   <form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
+     <!-- Πεδίο επιλογής αρχείου -->
+    <input type="file" name="file" required>
+     <!-- Κουμπί υποβολής -->
     <input type="submit" value="Ανέβασμα">
   </form>
 </body>
